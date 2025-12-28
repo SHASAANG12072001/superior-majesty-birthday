@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Happy Birthday My Superior Majesty</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #2b1634 url('assets/queen.png') no-repeat center top fixed;
+      background-size: 100% 100%;
+      color: #fff;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(255,255,255,0.13) 0, transparent 55%);
+      opacity: 0.5;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      text-align: center;
+      padding: 30px 20px 60px;
+      max-width: 640px;
+      width: 100%;
+      z-index: 2;
+    }
+
+    /* Gift box */
+    .gift-area {
+      margin-bottom: 30px;
+    }
+
+    .gift-box {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin: 0 auto;
+      cursor: pointer;
+      transform-origin: center;
+      animation: box-pulse 2s infinite;
+    }
+
+    .gift-box-body {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 70%;
+      background: linear-gradient(135deg, #ff4b8b, #ff9f68);
+      border-radius: 10px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    }
+
+    .gift-box-body::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 18%;
+      height: 100%;
+      background: rgba(255,255,255,0.85);
+    }
+
+    .gift-lid {
+      position: absolute;
+      bottom: 70%;
+      width: 115%;
+      left: -7.5%;
+      height: 35%;
+      background: linear-gradient(135deg, #ff809e, #ffd369);
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+      transform-origin: bottom center;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+    }
+
+    .gift-lid::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 16%;
+      height: 100%;
+      background: rgba(255,255,255,0.9);
+    }
+
+    .gift-ribbon-knot {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 24px;
+      background: #ffe3f5;
+      border-radius: 40px 40px 10px 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .gift-ribbon-knot::before,
+    .gift-ribbon-knot::after {
+      content: "";
+      position: absolute;
+      width: 26px;
+      height: 18px;
+      background: #ffe3f5;
+      border-radius: 50px 50px 10px 10px;
+      top: 4px;
+    }
+
+    .gift-ribbon-knot::before {
+      right: 100%;
+      transform-origin: right bottom;
+      transform: rotate(-18deg);
+    }
+
+    .gift-ribbon-knot::after {
+      left: 100%;
+      transform-origin: left bottom;
+      transform: rotate(18deg);
+    }
+
+    .click-text {
+      margin-top: 12px;
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+
+    @keyframes box-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    /* Common card style */
+    .card {
+      margin: 14px auto 0;
+      background: rgba(10, 0, 20, 0.65);
+      border-radius: 18px;
+      padding: 22px 20px;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      max-width: 640px;
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .surprise-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-bottom: 6px;
+    }
+
+    h1, h2 {
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+    }
+
+    .line {
+      margin: 6px 0;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .highlight {
+      font-weight: 600;
+    }
+
+    .signature {
+      margin-top: 16px;
+      font-style: italic;
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .next-btn {
+      margin-top: 14px;
+      border: none;
+      outline: none;
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #ffd86b, #ff92d1);
+      color: #391437;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.95rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .next-btn:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.5);
+    }
+
+    .next-btn:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 7px 18px rgba(0,0,0,0.5);
+    }
+
+    /* Majesty title with crown */
+    .majesty-title {
+      position: relative;
+      display: inline-block;
+      font-weight: 800;
+      color: #ffd86b;
+      text-shadow: 0 0 10px rgba(255, 216, 107, 0.9), 0 0 20px rgba(255, 216, 107, 0.7);
+      padding: 0 6px;
+    }
+
+    .majesty-title::before {
+      content: "👑";
+      position: absolute;
+      left: 50%;
+      bottom: 100%;
+      transform: translateX(-50%);
+      font-size: 1.4rem;
+      animation: crown-bounce 1.3s infinite ease-in-out;
+      filter: drop-shadow(0 0 6px rgba(255, 223, 0, 0.8));
+    }
+
+    @keyframes crown-bounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, -8px) rotate(-3deg); }
+    }
+
+    /* Surprise 1: hearts */
+    .hearts-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 6px 0 10px;
+      font-size: 1.4rem;
+    }
+
+    .hearts-row span {
+      display: inline-block;
+      animation: heart-float 1.8s infinite ease-in-out;
+    }
+
+    .hearts-row span:nth-child(2) {
+      animation-delay: 0.3s;
+    }
+
+    .hearts-row span:nth-child(3) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes heart-float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-6px) scale(1.1); }
+    }
+
+    /* Surprise 2: Queen & Princess */
+    .royal-duo {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .royal-card {
+      position: relative;
+      width: 130px;
+      padding: 12px 8px 10px;
+      border-radius: 18px;
+      background: radial-gradient(circle at top, rgba(255,255,255,0.18), rgba(0,0,0,0.6));
+      box-shadow: 0 12px 28px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+
+    .royal-avatar {
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 6px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      background: radial-gradient(circle at top, #ffcee8, #b75cff);
+      animation: avatar-pulse 2s infinite;
+    }
+
+    .royal-role {
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .royal-name {
+      font-size: 0.85rem;
+      margin-top: 3px;
+      font-weight: 600;
+    }
+
+    .crown-floating {
+      position: absolute;
+      top: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.4rem;
+      animation: float-crown 1.6s infinite ease-in-out;
+      filter: drop-shadow(0 0 6px rgba(255, 223, 0, 0.9));
+    }
+
+    @keyframes avatar-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,255,255,0.5); }
+      50% { transform: scale(1.05); box-shadow: 0 0 20px 5px rgba(255,255,255,0.3); }
+    }
+
+    @keyframes float-crown {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, -6px) rotate(4deg); }
+    }
+
+    .royal-caption {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Floating particles */
+    .particle {
+      position: fixed;
+      border-radius: 50%;
+      opacity: 0.7;
+      pointer-events: none;
+      animation: float-up linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes float-up {
+      0% {
+        transform: translateY(0) scale(0.6);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(-120vh) scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* 🌟 Floating Music Button */
+    .floating-music-btn{
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border:none;
+      background: radial-gradient(circle,#ffd86b,#ff92d1);
+      color:#381438;
+      font-size: 24px;
+      font-weight: 700;
+      cursor:pointer;
+      box-shadow:0 18px 40px rgba(0,0,0,0.6);
+      animation: floaty 2.5s infinite ease-in-out, glow 1.8s infinite alternate;
+      z-index: 999;
+    }
+
+    @keyframes floaty {
+      0%,100%{transform: translateY(0);}
+      50%{transform: translateY(-10px);}
+    }
+
+    @keyframes glow {
+      from{box-shadow:0 0 18px rgba(255,255,255,0.4);}
+      to{box-shadow:0 0 35px rgba(255,255,255,0.9);}
+    }
+
+    .floating-music-btn:active{
+      transform: scale(0.92);
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.6rem;
+      }
+      .gift-box {
+        width: 130px;
+        height: 130px;
+      }
+      .card {
+        padding: 18px 16px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      body {
+        background-attachment: scroll;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+
+  <div class="container">
+    <!-- GIFT SECTION -->
+    <div class="gift-area">
+      <div class="gift-box" id="giftBox">
+        <div class="gift-lid" id="giftLid">
+          <div class="gift-ribbon-knot"></div>
+        </div>
+        <div class="gift-box-body"></div>
+      </div>
+      <div class="click-text">Tap the gift to start the royal surprises 🎁👑</div>
+    </div>
+
+    <!-- SURPRISE 1 -->
+    <div class="card" id="surprise1">
+      <div class="surprise-label">Surprise 1</div>
+      <h2>From My Heart to My Superior Majesty</h2>
+
+      <div class="hearts-row">
+        <span>💖</span><span>💞</span><span>💖</span>
+      </div>
+
+      <p class="line">
+        Some people make the world beautiful just by being in it.
+        <span class="highlight">My Superior Majesty, you are one of those rare souls.</span>
+      </p>
+
+      <p class="line">
+        Your kindness heals, your strength inspires,
+        and your love makes every day softer and brighter.
+      </p>
+
+      <p class="line">
+        Today is not just a birthday, it’s a thank you
+        for every silent sacrifice, every smile, every bit of love you’ve given.
+      </p>
+
+      <button class="next-btn" id="next1">Next surprise ✨</button>
+    </div>
+
+    <!-- SURPRISE 2 -->
+    <div class="card" id="surprise2">
+      <div class="surprise-label">Surprise 2</div>
+      <h2>My Queen & My Princess Angels 👑</h2>
+
+      <div class="royal-duo">
+        <div class="royal-card">
+          <div class="crown-floating">👑</div>
+          <div class="royal-avatar">🌸</div>
+          <div class="royal-role">Superior Majesty</div>
+          <div class="royal-name">My Beautiful Majesty Angel Queen</div>
+        </div>
+
+        <div class="royal-card">
+          <div class="crown-floating">👑</div>
+          <div class="royal-avatar">💗</div>
+          <div class="royal-role">Princess</div>
+          <div class="royal-name">My Beautiful Majesty Angel Queen’s Princess</div>
+        </div>
+      </div>
+
+      <p class="royal-caption">
+        <span class="highlight">
+          My beautiful majesty angel queen and my superior majesty —
+          you both are the true angels of my life,
+          and I am endlessly grateful for you.
+        </span>
+      </p>
+
+      <p class="line">
+        One is the heart that raised such love.  
+        One is the heart that shares that love with me.  
+        Together, you are my forever blessings.
+      </p>
+
+      <button class="next-btn" id="next2">Final surprise ❤️</button>
+    </div>
+
+    <!-- FINAL -->
+    <div class="card" id="messageCard">
+      <div class="surprise-label">Final Surprise</div>
+      <h1>
+        Happy Birthday,
+        <span class="majesty-title">My Superior Majesty</span>
+      </h1>
+
+      <p class="line">
+        Some people make the world beautiful just by being in it.
+        <span class="highlight">My Superior Majesty, you are one of those rare souls.</span>
+      </p>
+
+      <p class="line">
+        Your kindness heals, your strength inspires,
+        and your love fills every heart with warmth.
+      </p>
+
+      <p class="line">
+        <span class="highlight">
+          My beautiful majesty angel queen and my superior majesty —
+          you both are the true angels of my life,
+          and I am endlessly grateful for you.
+        </span>
+      </p>
+
+      <p class="line">
+        Today we celebrate your grace, your goodness, and your beautiful soul.
+        Thank you for giving this world an angel like you.
+      </p>
+
+      <p class="line">
+        <span class="highlight">Happy Birthday, My Superior Majesty.</span> 💖
+      </p>
+
+      <div class="signature">
+        Made with all my love, from your forever grateful soul. 💫
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔊 Background Music -->
+  <audio id="bgMusic" loop>
+    <source src="assets/music.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- 🎵 Floating Music Button -->
+  <button id="floatingMusicBtn" class="floating-music-btn">🎵</button>
+
+  <script>
+    const giftBox = document.getElementById("giftBox");
+    const giftLid = document.getElementById("giftLid");
+    const surprise1 = document.getElementById("surprise1");
+    const surprise2 = document.getElementById("surprise2");
+    const messageCard = document.getElementById("messageCard");
+    const next1 = document.getElementById("next1");
+    const next2 = document.getElementById("next2");
+    const bgMusic = document.getElementById("bgMusic");
+    const floatingBtn = document.getElementById("floatingMusicBtn");
+
+    let opened = false;
+
+    giftBox.addEventListener("click", () => {
+      if (opened) return;
+      opened = true;
+
+      if (bgMusic) {
+        bgMusic.currentTime = 0;
+        bgMusic.play().catch(() => {});
+        floatingBtn.textContent = "⏸";
+      }
+
+      giftLid.style.transform = "translateY(-90px) rotate(-22deg)";
+      giftLid.style.opacity = "0";
+      giftBox.style.animation = "none";
+
+      setTimeout(() => {
+        surprise1.classList.add("visible");
+        smoothScrollTo(surprise1);
+      }, 500);
+
+      createParticles(90);
+    });
+
+    next1.addEventListener("click", () => {
+      surprise2.classList.add("visible");
+      createParticles(50);
+      smoothScrollTo(surprise2);
+    });
+
+    next2.addEventListener("click", () => {
+      messageCard.classList.add("visible");
+      createParticles(70);
+      smoothScrollTo(messageCard);
+    });
+
+    function smoothScrollTo(element) {
+      const rect = element.getBoundingClientRect();
+      const offset = rect.top + window.scrollY - 40;
+      window.scrollTo({
+        top: offset,
+        behavior: "smooth"
+      });
+    }
+
+    function createParticles(count) {
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement("div");
+        p.classList.add("particle");
+        const size = Math.random() * 8 + 4;
+        p.style.width = size + "px";
+        p.style.height = size + "px";
+        p.style.left = Math.random() * 100 + "vw";
+        p.style.bottom = "-20px";
+
+        const colors = [
+          "rgba(255, 223, 88, 0.9)",
+          "rgba(255, 133, 205, 0.9)",
+          "rgba(150, 210, 255, 0.9)",
+          "rgba(255, 255, 255, 0.9)"
+        ];
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+        const duration = Math.random() * 4 + 4;
+        p.style.animationDuration = duration + "s";
+
+        document.body.appendChild(p);
+
+        setTimeout(() => {
+          p.remove();
+        }, duration * 1000);
+      }
+    }
+
+    /* Floating Button Control */
+    floatingBtn.addEventListener("click", () => {
+      if(bgMusic.paused){
+        bgMusic.play();
+        floatingBtn.textContent = "⏸";
+      } else {
+        bgMusic.pause();
+        floatingBtn.textContent = "🎵";
+      }
+    });
+  </script>
+</body>
+</html>
